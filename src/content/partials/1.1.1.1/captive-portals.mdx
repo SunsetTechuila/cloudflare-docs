@@ -12,4 +12,21 @@ If you are experiencing connectivity issues related to captive portals:
 2. Connect to the Wi-Fi network.
 3. Once the connection has been established, re-add the static IP addresses or enable the 1.1.1.1 app.
 
+If you are using a network with captive portal often you can do the following:
+
+1. Remove the static IP addresses from the device or disable the 1.1.1.1 app.
+2. Connect to the Wi-Fi network.
+3. Copy the address of the captive portal login page
+3. Get automatic DNS address:
+
+```powershell
+$dns = Get-DnsClientServerAddress -AddressFamily IPv4 | Where-Object {$_.InterfaceAlias -eq (Get-NetAdapter | Where-Object {$_.Status -eq "Up"}).Name} | Select-Object -ExpandProperty ServerAddresses
+```
+
+4. Set DNS rule:
+
+```powershell
+Add-DnsClientNrptRule -Namespace "login_page_address" -NameServers $dns
+```
+
 :::
